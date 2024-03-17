@@ -35,8 +35,9 @@ Follow the below steps to run the app.
 1. Install flutter version : 3.19.3
 
 ```bash
-   flutter upgrade or use fvm[fvm](https://fvm.app/documentation/getting-started)
+   flutter upgrade 
 ```
+or use [fvm](https://fvm.app/documentation/getting-started).
 
 ### Install Project Packages
 
