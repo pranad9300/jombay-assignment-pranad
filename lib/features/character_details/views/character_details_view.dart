@@ -168,7 +168,7 @@ class CharacterDetailsView extends StatelessWidget {
                                     const NeverScrollableScrollPhysics(), // Disable scrolling
                                 shrinkWrap: true,
                                 crossAxisCount: 2,
-                                childAspectRatio: 1.5,
+                                childAspectRatio: 0.9,
                                 mainAxisSpacing: 8.0,
                                 crossAxisSpacing: 8.0,
                                 children: state.characterDetails?.episode
