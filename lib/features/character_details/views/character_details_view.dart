@@ -34,7 +34,7 @@ class CharacterDetailsView extends StatelessWidget {
               ),
           builder: (_, episodeSnapshot) =>
               episodeSnapshot.connectionState == ConnectionState.waiting
-                  ? const CircularProgressIndicator()
+                  ? const Center(child: CircularProgressIndicator())
                   : episodeSnapshot.hasData
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,24 +42,18 @@ class CharacterDetailsView extends StatelessWidget {
                             // Episode name (larger font)
                             Text(
                               episodeSnapshot.data!.name,
-                              style: const TextStyle(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: Theme.of(context).textTheme.bodyLarge,
+                              textScaler: const TextScaler.linear(0.9),
                             ),
                             // Air date (smaller font)
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  episodeSnapshot.data!.episode,
-                                  style: const TextStyle(color: Colors.grey),
-                                ),
-                                Text(
-                                  episodeSnapshot.data!.airDate,
-                                  style: const TextStyle(color: Colors.grey),
-                                ),
-                              ],
+
+                            Text(
+                              episodeSnapshot.data!.episode,
+                              style: const TextStyle(color: Colors.grey),
+                            ),
+                            Text(
+                              episodeSnapshot.data!.airDate,
+                              style: const TextStyle(color: Colors.grey),
                             ),
                           ],
                         )
@@ -112,11 +106,12 @@ class CharacterDetailsView extends StatelessWidget {
                             child: Image.network(
                               state.characterDetails?.image ?? '',
                               loadingBuilder: (context, widget, chunk) {
-                                double progress =
-                                    ((chunk?.cumulativeBytesLoaded ?? 1) /
+                                bool loaded =
+                                    ((chunk?.cumulativeBytesLoaded ?? 1) ==
                                         (chunk?.expectedTotalBytes ?? 1));
+
                                 return Center(
-                                  child: progress > 0
+                                  child: loaded
                                       ? widget
                                       : const CircularProgressIndicator(),
                                 );
@@ -153,14 +148,18 @@ class CharacterDetailsView extends StatelessWidget {
                         const SizedBox(height: 16.0), // Spacing before episodes
 
                         // Episode section title (Netflix font style)
-                        const Text(
-                          'Episodes',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Bebas Neue', // Optional: Netflix font
-                          ),
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Episodes',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
 
                         (state.characterDetails?.episode.isNotEmpty ?? true)
@@ -169,12 +168,13 @@ class CharacterDetailsView extends StatelessWidget {
                                     const NeverScrollableScrollPhysics(), // Disable scrolling
                                 shrinkWrap: true,
                                 crossAxisCount: 2,
-                                childAspectRatio: 16 / 9,
+                                childAspectRatio: 1.5,
                                 mainAxisSpacing: 8.0,
                                 crossAxisSpacing: 8.0,
                                 children: state.characterDetails?.episode
                                         .map(
-                                          (episodeUrl) => Text(episodeUrl),
+                                          (episodeUrl) => _buildEpisodeCard(
+                                              context, episodeUrl),
                                         )
                                         .toList() ??
                                     [],
